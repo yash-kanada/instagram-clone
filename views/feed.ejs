@@ -1,0 +1,150 @@
+<% include ./partials/header.ejs %>
+<div class="w-full min-h-screen bg-zinc-900 text-white py-5">
+  <div class="w-full px-4 flex items-center justify-between">
+    <img class="w-1/4" src="/images/logo.png" alt="" />
+    <div class="icons -mt-2 flex gap-5 items-center">
+      <i class="text-[1.4rem] ri-heart-3-line"></i>
+      <i class="text-[1.4rem] ri-messenger-line"></i>
+    </div>
+  </div>
+
+  <!-- stories section -->
+  <div class="story px-3 flex gap-3 overflow-auto mt-5">
+    <!-- story 1 -->
+    <a href="#">
+      <div class="circle flex-shrink-0">
+        <div
+          class="gradient w-[18vw] h-[18vw] bg-sky-100 rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
+          <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+            <img class="w-full h-full object-cover" src="/images/uploads/<%= user.profileImg %>" alt="">
+          </div>
+        </div>
+      </div>
+    </a>
+    <!-- story 2 -->
+      <a href="#">
+        <div class="circle flex-shrink-0">
+          <div
+            class="gradient w-[18vw] h-[18vw] bg-sky-100 rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
+            <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+              <img class="w-full h-full object-cover" src="/images/uploads/1615f527-4025-451e-97eb-e4752820d27e.png" alt="">
+            </div>
+          </div>
+        </div>
+      </a>
+    <!-- story 3 -->
+      <a href="#">
+        <div class="circle flex-shrink-0">
+          <div
+            class="gradient w-[18vw] h-[18vw] bg-sky-100 rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
+            <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+              <img class="w-full h-full object-cover" src="/images/uploads/c6e27227-3598-4117-9961-c600dee6fc45.avif" alt="">
+            </div>
+          </div>
+        </div>
+      </a>
+  </div>
+
+  <!-- post section -->
+  <div class="posts parent mb-20">
+    <!-- showing posts (use reverse fun on posts array)-->
+     <!-- for each on posts array of user schema -->
+    <% posts.reverse().forEach(function(elem){ %>
+      <div class="post mt-10 w-full min-h-[50vh]">
+        <div class="post mt-10 w-full min-h-[50vh]">
+          <div class="title px-4 flex items-center gap-2">
+            <div class="w-[9vw] h-[9vw] bg-sky-100 rounded-full overflow-hidden">
+              <!-- fatching profile pic of user who upload post -->
+              <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.user.profileImg %>" alt="">
+            </div>
+            <!-- fatching username of user who upload post -->
+            <h4 class="text-sm"> <%= elem.user.username %> </h4> 
+            <h6 class="text-xs opacity-30">1d</h6>
+            <!-- compare post's user to logged in user -->
+            <!-- two obj cann't compare, so using toString() -->
+              
+            <!-- <% if(elem.user._id.toString() === user._id.toString()){ %>
+                <a class="ml-48" href="/delete/post/<%= elem._id %>"><i class="ri-delete-bin-6-line"></i></a>
+              <% } %> -->
+
+          </div>
+          <div class="w-full h-96 mt-4 bg-sky-100 overflow-hidden">
+            <!-- in post schema img named as picture -->
+            <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.picture %>" alt="">
+          </div>
+          <div class="options w-full px-4 flex justify-between items-center text-[1.4rem]" >
+            <div class="flex gap-3 mt-2">
+              <a href="/like/post/<%= elem._id %>">
+
+                <!-- if user liked post, set filled heart -->
+                <!-- this lines return indexOf not return -1 means user is present -->
+                <% if(elem.likes.indexOf(user._id) !== -1 ){ %>
+                  <i class="heart ri-heart-3-fill text-red-600"></i>
+                <% } else { %>
+                  <i class="heart ri-heart-3-line"></i>
+                <% } %>
+              </a>
+              <i class="ri-chat-3-line"></i>
+              <i class="ri-share-circle-line"></i>
+            </div>
+            <i class="save ri-bookmark-line"></i>
+          </div>
+          <h3 class="likeval px-4 mt-2 text-sm leading-none tracking-tight">
+            <!-- showing length of likes array of post schema -->
+            <%= elem.likes.length %> likes
+          </h3>
+          <h2 class="text-white font-light text-sm mt-2">
+            <span class="font-semibold pl-4 pr-2"><%= elem.user.username %></span>
+            <%= elem.caption %>
+          </h2>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+  integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<script>
+  function formatRelativeTime(date) {
+    const now = new Date();
+    const diff = now - date;
+
+    // Convert milliseconds to seconds
+    const seconds = Math.floor(diff / 1000);
+
+    if (seconds < 60) {
+      return `${seconds}s`;
+    }
+
+    const minutes = Math.floor(seconds / 60);
+
+    if (minutes < 60) {
+      return `${minutes}m`;
+    }
+
+    const hours = Math.floor(minutes / 60);
+
+    if (hours < 24) {
+      return `${hours}h`;
+    }
+
+    const days = Math.floor(hours / 24);
+
+    if (days < 7) {
+      return `${days}d`;
+    }
+
+    const weeks = Math.floor(days / 7);
+
+    return `${weeks}w`;
+  }
+
+  
+</script>
+
+
+<% include ./partials/footer.ejs %>
