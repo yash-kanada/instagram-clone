@@ -53,17 +53,24 @@
       <div class="post mt-10 w-full min-h-[50vh]">
         <div class="post mt-10 w-full min-h-[50vh]">
           <div class="title px-4 flex items-center gap-2">
-              <a href="/user/profile/<%= elem.user.username %>" class="flex items-center space-x-2">
-                <div class="w-[9vw] h-[9vw] bg-sky-100 rounded-full overflow-hidden">
-                  <!-- <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.user.profileImg %>" alt=""> -->
-                </div>
-                <h4 class="text-sm"> <%= elem.user.username %> </h4>
-              </a>
+            <div class="w-[9vw] h-[9vw] bg-sky-100 rounded-full overflow-hidden">
+              <!-- fatching profile pic of user who upload post -->
+              <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.user.profileImg %>" alt="">
+            </div>
+            <!-- fatching username of user who upload post -->
+            <h4 class="text-sm"> <%= elem.user.username %> </h4> 
             <h6 class="text-xs opacity-30">1d</h6>
+            <!-- compare post's user to logged in user -->
+            <!-- two obj cann't compare, so using toString() -->
+              
+            <!-- <% if(elem.user._id.toString() === user._id.toString()){ %>
+                <a class="ml-48" href="/delete/post/<%= elem._id %>"><i class="ri-delete-bin-6-line"></i></a>
+              <% } %> -->
+
           </div>
           <div class="w-full h-96 mt-4 bg-sky-100 overflow-hidden">
             <!-- in post schema img named as picture -->
-            <!-- <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.picture %>" alt=""> -->
+            <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.picture %>" alt="">
           </div>
           <div class="options w-full px-4 flex justify-between items-center text-[1.4rem]" >
             <div class="flex gap-3 mt-2">
@@ -87,13 +94,7 @@
             <%= elem.likes.length %> likes
           </h3>
           <h2 class="text-white font-light text-sm mt-2">
-            <% if(elem.user._id.equals(user._id)) { %>
-                <a href="/profile">
-                    <span class="font-semibold pl-4 pr-2"><%= elem.user.username %></span>
-                </a>
-            <% } else { %>
-                <span class="font-semibold pl-4 pr-2"><%= elem.user.username %></span>
-            <% } %>
+            <span class="font-semibold pl-4 pr-2"><%= elem.user.username %></span>
             <%= elem.caption %>
           </h2>
         </div>

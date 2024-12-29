@@ -83,6 +83,40 @@ router.get("/like/post/:id", isLoggedIn, async function (req, res) {
   res.redirect("/feed");
 });
 
+
+router.get("/user/profile/:username", isLoggedIn, async function (req, res) {
+  try {
+      let user = await userModel.findOne({username: req.session.passport.user}).populate("posts");
+      let otherUser = await userModel.findOne({ username: req.params.username }).populate("posts");
+      
+      // Log and handle case if otherUser is not found
+      if (!otherUser) {
+          console.error("User not found for username:", req.params.username);
+          return res.status(404).render("error", { message: "User not found" });
+      }
+      if (otherUser.equals(user)){
+        res.render("profile", { footer:true, user, otherUser });
+      }
+      else{
+      // Render the profile page with the retrieved user data
+      res.render("profileForOtherUser", { footer: true, user, otherUser });
+      }
+  } catch (error) {
+      // Log any unexpected errors
+      console.error("Error fetching user profile:", error);
+      res.status(500).render("error", { message: "Internal server error" });
+  }
+});
+
+
+
+router.get("/profileForOtherUser", isLoggedIn, async function (req, res) {
+  const user = await userModel.findOne({username: req.session.passport.user}).populate("posts");
+  res.render("profileForOtherUser", { footer: true,user });
+});
+
+
+
 router.get("/edit", isLoggedIn, async function (req, res) {
 
   // finding logged in user
